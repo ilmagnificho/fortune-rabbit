@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">🐰 오늘의 운세 - 운세토끼</title>
+    
+    <!-- SEO & 소셜 공유 최적화 -->
+    <meta name="description" id="page-description" content="운세토끼가 알려주는 오늘의 운세! 생년월일만 입력하면 AI가 당신의 하루를 예측합니다.">
+    <meta property="og:title" content="🐰 오늘의 운세 - 운세토끼">
+    <meta property="og:description" content="운세토끼가 알려주는 오늘의 운세! 생년월일만 입력하면 AI가 당신의 하루를 예측합니다.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/FF69B4/FFFFFF?text=🐰+토끼점">
+    <meta property="og:type" content="website">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* 언어 선택 버튼 */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .language-btn {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .language-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .language-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            min-width: 150px;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        .language-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .language-option:hover {
+            background: #f5f5f5;
+        }
+        
+        .language-option.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* 인트로 화면 */
+        #intro-screen {
+            text-align: center;
+            padding-top: 20vh;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        .logo {
+            font-size: 100px;
+            animation: bounce 2s infinite;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            margin-bottom: 50px;
+        }
+        
+        /* 입력 화면 */
+        #input-screen {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        input[type="date"],
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* 로딩 화면 */
+        #loading-screen {
+            display: none;
+            text-align: center;
+            padding-top: 30vh;
+        }
+        
+        .loading-rabbit {
+            font-size: 80px;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        
+        /* 결과 화면 */
+        #result-screen {
+            display: none;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        .result-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .result-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+        
+        .stars {
+            font-size: 32px;
+            letter-spacing: 5px;
+        }
+        
+        .fortune-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .fortune-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+        }
+        
+        .fortune-item:hover {
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+        
+        .fortune-item:last-child {
+            border-bottom: none;
+        }
+        
+        .fortune-icon {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+        
+        .fortune-content {
+            flex: 1;
+        }
+        
+        .fortune-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .fortune-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .fortune-arrow {
+            font-size: 20px;
+            color: #999;
+            transition: transform 0.3s;
+        }
+        
+        .fortune-item:hover .fortune-arrow {
+            transform: translateX(5px);
+        }
+        
+        /* 상세보기 모달 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUpModal 0.3s;
+            z-index: 1001;
+        }
+        
+        @keyframes slideUpModal {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+        
+        .modal-close {
+            float: right;
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+        }
+        
+        .detail-section h4 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .detail-section p {
+            color: #555;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        
+        /* 잠금된 콘텐츠 */
+        .locked-content {
+            position: relative;
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .unlock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 10;
+            filter: none;
+        }
+        
+        .unlock-overlay h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .unlock-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .unlock-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .unlock-btn.watch-ad {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .unlock-btn.cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        /* 광고 영역 */
+        .ad-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px dashed #e0e0e0;
+        }
+        
+        .ad-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        
+        .ad-placeholder {
+            background: #f5f5f5;
+            padding: 40px;
+            border-radius: 12px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .advice-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .advice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .advice-content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        /* 공유 버튼 */
+        .share-section {
+            margin-top: 30px;
+        }
+        
+        .share-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .share-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .share-kakao {
+            background: #FEE500;
+            color: #000;
+        }
+        
+        .share-twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+        
+        .share-facebook {
+            background: #1877F2;
+            color: white;
+        }
+        
+        .share-copy {
+            background: #34C759;
+            color: white;
+        }
+        
+        .retry-btn {
+            background: white;
+            color: #667eea;
+            margin-top: 15px;
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c00;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 반응형 */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .card {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 80px;
+            }
+            
+            .modal-content {
+                max-height: 85vh;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 언어 선택 -->
+    <div class="language-selector">
+        <button class="language-btn" onclick="toggleLanguageDropdown()">
+            <span id="current-language">🌏 한국어</span>
+        </button>
+        <div class="language-dropdown" id="language-dropdown">
+            <div class="language-option" data-lang="ko" onclick="changeLanguage('ko')">
+                🇰🇷 한국어
+            </div>
+            <div class="language-option" data-lang="en" onclick="changeLanguage('en')">
+                🇺🇸 English
+            </div>
+            <div class="language-option" data-lang="ja" onclick="changeLanguage('ja')">
+                🇯🇵 日本語
+            </div>
+            <div class="language-option" data-lang="zh" onclick="changeLanguage('zh')">
+                🇨🇳 中文
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- 인트로 화면 -->
+        <div id="intro-screen">
+            <div class="logo">🐰</div>
+            <h1 data-i18n="title">오늘의 운세</h1>
+            <p class="subtitle" data-i18n="subtitle">토끼가 알려주는 당신의 하루</p>
+            <button class="btn" onclick="showInputScreen()" data-i18n="start">시작하기</button>
+        </div>
+        
+        <!-- 입력 화면 -->
+        <div id="input-screen">
+            <div class="card">
+                <h2 style="margin-bottom: 30px; text-align: center; color: #333;" data-i18n="inputTitle">생년월일을 입력하세요</h2>
+                
+                <div id="error-container"></div>
+                
+                <div class="input-group">
+                    <label data-i18n="nicknameLabel">닉네임 (선택)</label>
+                    <input type="text" id="nickname" data-i18n-placeholder="nicknamePlaceholder" placeholder="예: 행운이" maxlength="10">
+                </div>
+                
+                <div class="input-group">
+                    <label data-i18n="birthdateLabel">생년월일 *</label>
+                    <input type="date" id="birthdate" required>
+                </div>
+                
+                <button class="btn" id="submit-btn" onclick="getFortune()" data-i18n="submit">운세 보기</button>
+            </div>
+            
+            <!-- 광고 영역 1 -->
+            <div class="ad-container">
+                <div class="ad-label" data-i18n="ad">광고</div>
+                <div class="ad-placeholder">
+                    Google AdSense
+                    <br>(320x100)
+                </div>
+            </div>
+        </div>
+        
+        <!-- 로딩 화면 -->
+        <div id="loading-screen">
+            <div class="loading-rabbit">🐰</div>
+            <div class="loading-text" data-i18n="loading">토끼가 운세를 확인하고 있어요...</div>
+        </div>
+        
+        <!-- 결과 화면 -->
+        <div id="result-screen">
+            <div class="result-header">
+                <h2 id="result-name">당신의 오늘 운세</h2>
+                <div class="score" id="total-score">88점</div>
+                <div class="stars" id="star-rating">⭐⭐⭐⭐</div>
+                <p style="font-size: 14px; margin-top: 10px; opacity: 0.9;"><span data-i18n="topRank">상위</span> <span id="rank-percent">12</span>%</p>
+            </div>
+            
+            <!-- 종합 운세 -->
+            <div class="fortune-card">
+                <div class="fortune-item" onclick="showFortuneDetail('love')">
+                    <div class="fortune-icon">💝</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="loveFortune">연애운</div>
+                        <div class="fortune-value" id="love-fortune">최상</div>
+                    </div>
+                    <div class="fortune-arrow">→</div>
+                </div>
+                
+                <div class="fortune-item" onclick="showFortuneDetail('money')">
+                    <div class="fortune-icon">💰</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="moneyFortune">재물운</div>
+                        <div class="fortune-value" id="money-fortune">상</div>
+                    </div>
+                    <div class="fortune-arrow">→</div>
+                </div>
+                
+                <div class="fortune-item" onclick="showFortuneDetail('health')">
+                    <div class="fortune-icon">🏥</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="healthFortune">건강운</div>
+                        <div class="fortune-value" id="health-fortune">중상</div>
+                    </div>
+                    <div class="fortune-arrow">→</div>
+                </div>
+                
+                <div class="fortune-item" onclick="showFortuneDetail('work')">
+                    <div class="fortune-icon">📚</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="workFortune">학업/업무운</div>
+                        <div class="fortune-value" id="work-fortune">중</div>
+                    </div>
+                    <div class="fortune-arrow">→</div>
+                </div>
+            </div>
+            
+            <!-- 광고 영역 2 -->
+            <div class="ad-container">
+                <div class="ad-label" data-i18n="ad">광고</div>
+                <div class="ad-placeholder">
+                    Google AdSense
+                    <br>(Native)
+                </div>
+            </div>
+            
+            <!-- 행운의 아이템 -->
+            <div class="fortune-card">
+                <h3 style="margin-bottom: 20px; color: #333;" data-i18n="luckyItems">🍀 오늘의 행운 아이템</h3>
+                <div class="fortune-item" style="cursor: default;">
+                    <div class="fortune-icon">🎨</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="luckyColor">행운의 색</div>
+                        <div class="fortune-value" id="lucky-color">파란색</div>
+                    </div>
+                </div>
+                
+                <div class="fortune-item" style="cursor: default;">
+                    <div class="fortune-icon">🔢</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="luckyNumber">행운의 숫자</div>
+                        <div class="fortune-value" id="lucky-number">7</div>
+                    </div>
+                </div>
+                
+                <div class="fortune-item" style="cursor: default;">
+                    <div class="fortune-icon">⏰</div>
+                    <div class="fortune-content">
+                        <div class="fortune-label" data-i18n="luckyTime">행운의 시간</div>
+                        <div class="fortune-value" id="lucky-time">오후 3-5시</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 오늘의 조언 -->
+            <div class="advice-card">
+                <div class="advice-title" data-i18n="adviceTitle">🎯 오늘의 조언</div>
+                <div class="advice-content" id="advice-text">
+                    오늘은 새로운 시작에 좋은 날입니다. 오후에 중요한 결정을 내리세요.
+                </div>
+            </div>
+            
+            <!-- 공유 섹션 -->
+            <div class="share-section">
+                <div class="card" style="padding: 25px;">
+                    <h3 style="margin-bottom: 15px; color: #333; text-align: center;" data-i18n="shareTitle">친구에게 공유하기</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn share-kakao" onclick="shareKakao()">
+                            💬 <span data-i18n="kakao">카카오톡</span>
+                        </button>
+                        <button class="share-btn share-twitter" onclick="shareTwitter()">
+                            🐦 <span data-i18n="twitter">트위터</span>
+                        </button>
+                        <button class="share-btn share-facebook" onclick="shareFacebook()">
+                            👍 <span data-i18n="facebook">페이스북</span>
+                        </button>
+                        <button class="share-btn share-copy" onclick="copyLink()">
+                            🔗 <span data-i18n="copyLink">링크 복사</span>
+                        </button>
+                    </div>
+                    <button class="btn retry-btn" onclick="resetApp()" data-i18n="retry">다시 보기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 운세 상세보기 모달 -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal-content" id="modal-content">
+        <div class="modal-header">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <div class="modal-title" id="modal-title">
+                💝 연애운 상세
+            </div>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <!-- 동적으로 채워짐 -->
+        </div>
+    </div>
+    
+    <script>
+        // 다국어 번역 데이터
+        const translations = {
+            ko: {
+                title: '오늘의 운세',
+                subtitle: '운세토끼가 알려주는 당신의 하루',
+                start: '시작하기',
+                inputTitle: '생년월일을 입력하세요',
+                nicknameLabel: '닉네임 (선택)',
+                nicknamePlaceholder: '예: 행운이',
+                birthdateLabel: '생년월일 *',
+                submit: '운세 보기',
+                ad: '광고',
+                loading: '운세토끼가 운세를 확인하고 있어요...',
+                topRank: '상위',
+                loveFortune: '연애운',
+                moneyFortune: '재물운',
+                healthFortune: '건강운',
+                workFortune: '학업/업무운',
+                luckyItems: '🍀 오늘의 행운 아이템',
+                luckyColor: '행운의 색',
+                luckyNumber: '행운의 숫자',
+                luckyTime: '행운의 시간',
+                adviceTitle: '🎯 오늘의 조언',
+                shareTitle: '친구에게 공유하기',
+                kakao: '카카오톡',
+                twitter: '트위터',
+                facebook: '페이스북',
+                copyLink: '링크 복사',
+                retry: '다시 보기',
+                detailTitle: '상세',
+                summary: '요약',
+                mainFortune: '오늘의 운세',
+                tips: '추천 행동',
+                lockedTitle: '🔒 더 자세한 운세',
+                lockedDesc: '광고를 시청하고 확인하세요!',
+                watchAd: '📺 광고 보고 무료로 보기',
+                cancel: '취소',
+                yourFortune: '님의 오늘 운세'
+            },
+            en: {
+                title: "Today's Fortune",
+                subtitle: 'Your daily fortune by Fortune Rabbit',
+                start: 'Start',
+                inputTitle: 'Enter your birth date',
+                nicknameLabel: 'Nickname (optional)',
+                nicknamePlaceholder: 'e.g. Lucky',
+                birthdateLabel: 'Birth Date *',
+                submit: 'Get Fortune',
+                ad: 'Ad',
+                loading: 'Fortune Rabbit is checking your fortune...',
+                topRank: 'Top',
+                loveFortune: 'Love',
+                moneyFortune: 'Money',
+                healthFortune: 'Health',
+                workFortune: 'Work/Study',
+                luckyItems: '🍀 Lucky Items',
+                luckyColor: 'Lucky Color',
+                luckyNumber: 'Lucky Number',
+                luckyTime: 'Lucky Time',
+                adviceTitle: '🎯 Daily Advice',
+                shareTitle: 'Share with Friends',
+                kakao: 'KakaoTalk',
+                twitter: 'Twitter',
+                facebook: 'Facebook',
+                copyLink: 'Copy Link',
+                retry: 'Try Again',
+                detailTitle: 'Detail',
+                summary: 'Summary',
+                mainFortune: "Today's Fortune",
+                tips: 'Tips',
+                lockedTitle: '🔒 Detailed Fortune',
+                lockedDesc: 'Watch an ad to unlock!',
+                watchAd: '📺 Watch Ad to Unlock',
+                cancel: 'Cancel',
+                yourFortune: "'s Fortune Today"
+            },
+            ja: {
+                title: '今日の運勢',
+                subtitle: '運勢うさぎが教えるあなたの一日',
+                start: 'スタート',
+                inputTitle: '生年月日を入力してください',
+                nicknameLabel: 'ニックネーム（任意）',
+                nicknamePlaceholder: '例：ラッキー',
+                birthdateLabel: '生年月日 *',
+                submit: '運勢を見る',
+                ad: '広告',
+                loading: '運勢うさぎが運勢を確認しています...',
+                topRank: '上位',
+                loveFortune: '恋愛運',
+                moneyFortune: '金運',
+                healthFortune: '健康運',
+                workFortune: '仕事運',
+                luckyItems: '🍀 今日のラッキーアイテム',
+                luckyColor: 'ラッキーカラー',
+                luckyNumber: 'ラッキーナンバー',
+                luckyTime: 'ラッキータイム',
+                adviceTitle: '🎯 今日のアドバイス',
+                shareTitle: '友達にシェア',
+                kakao: 'カカオトーク',
+                twitter: 'ツイッター',
+                facebook: 'フェイスブック',
+                copyLink: 'リンクをコピー',
+                retry: 'もう一度',
+                detailTitle: '詳細',
+                summary: '概要',
+                mainFortune: '今日の運勢',
+                tips: 'おすすめの行動',
+                lockedTitle: '🔒 詳しい運勢',
+                lockedDesc: '広告を見て確認してください！',
+                watchAd: '📺 広告を見て無料で見る',
+                cancel: 'キャンセル',
+                yourFortune: 'さんの今日の運勢'
+            },
+            zh: {
+                title: '今日运势',
+                subtitle: '运势兔告诉你的一天',
+                start: '开始',
+                inputTitle: '请输入出生日期',
+                nicknameLabel: '昵称（可选）',
+                nicknamePlaceholder: '例如：幸运',
+                birthdateLabel: '出生日期 *',
+                submit: '查看运势',
+                ad: '广告',
+                loading: '运势兔正在查看你的运势...',
+                topRank: '前',
+                loveFortune: '爱情运',
+                moneyFortune: '财运',
+                healthFortune: '健康运',
+                workFortune: '工作/学业运',
+                luckyItems: '🍀 今日幸运物',
+                luckyColor: '幸运颜色',
+                luckyNumber: '幸运数字',
+                luckyTime: '幸运时间',
+                adviceTitle: '🎯 今日建议',
+                shareTitle: '分享给朋友',
+                kakao: 'KakaoTalk',
+                twitter: 'Twitter',
+                facebook: 'Facebook',
+                copyLink: '复制链接',
+                retry: '重新查看',
+                detailTitle: '详情',
+                summary: '摘要',
+                mainFortune: '今日运势',
+                tips: '推荐行动',
+                lockedTitle: '🔒 更详细的运势',
+                lockedDesc: '观看广告后查看！',
+                watchAd: '📺 观看广告免费查看',
+                cancel: '取消',
+                yourFortune: '的今日运势'
+            }
+        };
+        
+        let currentLang = 'ko';
+        let fortuneData = null;
+        let unlockedDetails = new Set();
+        
+        // 지역별 언어 자동 감지
+        function detectLanguage() {
+            const userLang = navigator.language || navigator.userLanguage;
+            const langCode = userLang.toLowerCase();
+            
+            if (langCode.startsWith('ko')) return 'ko';
+            if (langCode.startsWith('ja')) return 'ja';
+            if (langCode.startsWith('zh')) return 'zh';
+            return 'en'; // 기본값
+        }
+        
+        // 언어 변경
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // UI 업데이트
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // placeholder 업데이트
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+            
+            // 언어 버튼 업데이트
+            const langNames = {
+                ko: '🌏 한국어',
+                en: '🌏 English',
+                ja: '🌏 日本語',
+                zh: '🌏 中文'
+            };
+            document.getElementById('current-language').textContent = langNames[lang];
+            
+            // 페이지 타이틀 업데이트
+            document.getElementById('page-title').textContent = `🐰 ${translations[lang].title}`;
+            document.getElementById('page-description').content = translations[lang].subtitle;
+            
+            // 활성 언어 표시
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === lang) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // 드롭다운 닫기
+            document.getElementById('language-dropdown').classList.remove('show');
+        }
+        
+        // 언어 드롭다운 토글
+        function toggleLanguageDropdown() {
+            document.getElementById('language-dropdown').classList.toggle('show');
+        }
+        
+        // 상세 운세 데이터 (Mock - 실제로는 API에서)
+        const fortuneDetails = {
+            love: {
+                icon: '💝',
+                summary: {
+                    ko: '오늘의 연애운은 매우 좋습니다!',
+                    en: 'Your love fortune today is excellent!',
+                    ja: '今日の恋愛運はとても良いです！',
+                    zh: '今天的爱情运非常好！'
+                },
+                detail: {
+                    ko: '오늘은 새로운 만남의 기회가 있을 수 있습니다. 평소와 다른 장소에 가보세요. 기존 관계가 있다면 한 단계 발전할 가능성이 높습니다. 솔직한 대화를 나눠보세요. 저녁에는 로맨틱한 분위기가 조성됩니다.',
+                    en: 'Today you may have opportunities for new encounters. Try going to different places. If you have an existing relationship, it may develop to the next level. Have honest conversations. The evening will be romantic.',
+                    ja: '今日は新しい出会いのチャンスがあるかもしれません。いつもと違う場所に行ってみてください。既存の関係があれば、一段階発展する可能性が高いです。正直な対話を交わしてみてください。夜にはロマンチックな雰囲気が作られます。',
+                    zh: '今天可能会有新的相遇机会。试着去不同的地方。如果有现有的关系，很可能会进一步发展。进行坦诚的对话。晚上会有浪漫的氛围。'
+                },
+                tips: {
+                    ko: '밝은 색상의 옷을 입고, 향수를 뿌리면 더욱 좋습니다. 먼저 연락을 시도하는 것도 좋아요.',
+                    en: 'Wear bright colors and perfume. Taking the initiative to contact first is also good.',
+                    ja: '明るい色の服を着て、香水をつけるとさらに良いです。先に連絡を試みるのも良いでしょう。',
+                    zh: '穿明亮颜色的衣服，喷香水会更好。主动联系也很好。'
+                }
+            },
+            money: {
+                icon: '💰',
+                summary: {
+                    ko: '오늘은 작은 횡재수가 있을 수 있습니다.',
+                    en: 'You may have a small windfall today.',
+                    ja: '今日は小さな臨時収入があるかもしれません。',
+                    zh: '今天可能会有小小的意外之财。'
+                },
+                detail: {
+                    ko: '예상치 못한 수입이 있을 수 있습니다. 작은 기회도 놓치지 마세요. 오후에는 투자나 재정 결정을 내리기 좋은 시간입니다. 신중하게 판단하세요. 저녁에는 절약 모드를 유지하는 것이 좋습니다.',
+                    en: 'You may have unexpected income. Don\'t miss even small opportunities. Afternoon is good for investment or financial decisions. Be careful. Keep saving mode in the evening.',
+                    ja: '予想外の収入があるかもしれません。小さなチャンスも逃さないでください。午後は投資や財政的な決定をするのに良い時間です。慎重に判断してください。夜は節約モードを維持するのが良いです。',
+                    zh: '可能会有意外的收入。不要错过小机会。下午是做投资或财务决定的好时机。要谨慎判断。晚上保持节约模式比较好。'
+                },
+                tips: {
+                    ko: '복권을 사거나 적금을 들기 좋은 날입니다. 행운의 숫자를 활용해보세요.',
+                    en: 'Good day to buy lottery or start savings. Use your lucky numbers.',
+                    ja: '宝くじを買ったり、貯金を始めるのに良い日です。ラッキーナンバーを活用してみてください。',
+                    zh: '适合买彩票或开始储蓄的日子。利用幸运数字。'
+                }
+            },
+            health: {
+                icon: '🏥',
+                summary: {
+                    ko: '전반적으로 컨디션이 양호합니다.',
+                    en: 'Overall condition is good.',
+                    ja: '全体的にコンディションは良好です。',
+                    zh: '整体状况良好。'
+                },
+                detail: {
+                    ko: '아침 운동이나 스트레칭으로 하루를 시작하면 더욱 좋습니다. 오후에는 잠깐의 휴식이 필요합니다. 무리하지 마세요. 저녁에는 가벼운 산책이 건강에 도움이 됩니다. 충분한 수면을 취하세요.',
+                    en: 'Starting the day with morning exercise or stretching is even better. Take a short break in the afternoon. Don\'t overdo it. Light walks in the evening help your health. Get enough sleep.',
+                    ja: '朝の運動やストレッチで一日を始めるとさらに良いです。午後は少しの休憩が必要です。無理をしないでください。夜は軽い散歩が健康に役立ちます。十分な睡眠を取ってください。',
+                    zh: '以早晨运动或拉伸开始一天会更好。下午需要短暂的休息。不要过度。晚上轻松的散步对健康有帮助。充足的睡眠。'
+                },
+                tips: {
+                    ko: '물을 자주 마시고, 과식은 피하세요. 스트레스 관리가 중요합니다.',
+                    en: 'Drink water frequently and avoid overeating. Stress management is important.',
+                    ja: '水をよく飲み、過食は避けてください。ストレス管理が重要です。',
+                    zh: '经常喝水，避免暴饮暴食。压力管理很重要。'
+                }
+            },
+            work: {
+                icon: '📚',
+                summary: {
+                    ko: '집중력이 높아지는 하루입니다.',
+                    en: 'A day of increased concentration.',
+                    ja: '集中力が高まる一日です。',
+                    zh: '注意力提高的一天。'
+                },
+                detail: {
+                    ko: '오전에는 창의적인 아이디어가 떠오를 수 있습니다. 메모를 준비하세요. 오후에는 중요한 회의나 발표가 잘 풀릴 것입니다. 자신감을 가지세요. 저녁에는 학습이나 자기계발에 집중하기 좋습니다.',
+                    en: 'Creative ideas may come in the morning. Prepare to take notes. Important meetings or presentations will go well in the afternoon. Be confident. Evening is good for learning or self-development.',
+                    ja: '午前中は創造的なアイデアが浮かぶかもしれません。メモを準備してください。午後は重要な会議やプレゼンがうまくいくでしょう。自信を持ってください。夜は学習や自己啓発に集中するのに良いです。',
+                    zh: '上午可能会有创造性的想法。准备好做笔记。下午重要的会议或演讲会进展顺利。要有信心。晚上适合学习或自我提升。'
+                },
+                tips: {
+                    ko: '우선순위를 정하고 하나씩 처리하세요. 동료와의 협업도 원활할 것입니다.',
+                    en: 'Set priorities and handle them one by one. Collaboration with colleagues will be smooth.',
+                    ja: '優先順位を決めて一つずつ処理してください。同僚との協業も円滑でしょう。',
+                    zh: '确定优先顺序，逐个处理。与同事的合作也会很顺利。'
+                }
+            }
+        };
+        
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 저장된 언어 또는 자동 감지
+            const savedLang = localStorage.getItem('preferredLanguage');
+            const detectedLang = savedLang || detectLanguage();
+            changeLanguage(detectedLang);
+            
+            // 날짜 최대값 설정
+            const today = new Date();
+            const maxDate = today.toISOString().split('T')[0];
+            document.getElementById('birthdate').setAttribute('max', maxDate);
+            
+            // 외부 클릭시 언어 드롭다운 닫기
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.language-selector')) {
+                    document.getElementById('language-dropdown').classList.remove('show');
+                }
+            });
+        });
+        
+        // 화면 전환
+        function showInputScreen() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('input-screen').style.display = 'block';
+        }
+        
+        function showLoadingScreen() {
+            document.getElementById('input-screen').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'block';
+        }
+        
+        function showResultScreen() {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+        }
+        
+        function resetApp() {
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('input-screen').style.display = 'block';
+            document.getElementById('nickname').value = '';
+            document.getElementById('birthdate').value = '';
+            document.getElementById('error-container').innerHTML = '';
+            unlockedDetails.clear();
+        }
+        
+        function showError(message) {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+            setTimeout(() => {
+                errorContainer.innerHTML = '';
+            }, 5000);
+        }
+        
+        // 운세 조회
+        async function getFortune() {
+            const birthdate = document.getElementById('birthdate').value;
+            const nickname = document.getElementById('nickname').value || translations[currentLang].yourFortune.replace('의 today', '').replace("'s Fortune Today", 'You').replace('さんの今日の運勢', 'あなた').replace('的今日运势', '你');
+            
+            if (!birthdate) {
+                showError(translations[currentLang].birthdateLabel + '!');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            showLoadingScreen();
+            
+            try {
+                // Mock 데이터 (실제로는 API 호출)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                fortuneData = generateMockFortune(birthdate, nickname);
+                displayFortune(fortuneData);
+                showResultScreen();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('input-screen').style.display = 'block';
+                showError('Error loading fortune. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Mock 운세 생성
+        function generateMockFortune(birthdate, nickname) {
+            const score = Math.floor(Math.random() * 30) + 70;
+            const stars = Math.floor(score / 20);
+            
+            const fortunes = {
+                ko: ['최상', '상', '중상', '중', '중하'],
+                en: ['Excellent', 'Good', 'Above Average', 'Average', 'Below Average'],
+                ja: ['最高', '良', '中上', '中', '中下'],
+                zh: ['极好', '好', '中上', '中', '中下']
+            };
+            
+            const colors = {
+                ko: ['빨간색', '파란색', '노란색', '초록색', '보라색', '분홍색'],
+                en: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Pink'],
+                ja: ['赤', '青', '黄色', '緑', '紫', 'ピンク'],
+                zh: ['红色', '蓝色', '黄色', '绿色', '紫色', '粉色']
+            };
+            
+            const times = {
+                ko: ['오전 9-11시', '오후 1-3시', '오후 3-5시', '오후 7-9시'],
+                en: ['9-11 AM', '1-3 PM', '3-5 PM', '7-9 PM'],
+                ja: ['午前9-11時', '午後1-3時', '午後3-5時', '午後7-9時'],
+                zh: ['上午9-11点', '下午1-3点', '下午3-5点', '下午7-9点']
+            };
+            
+            const advice = {
+                ko: '오늘은 긍정적인 마음가짐이 행운을 부릅니다. 오후에 좋은 소식이 있을 거예요. 작은 변화를 시도해보세요!',
+                en: 'A positive mindset brings luck today. Good news in the afternoon. Try small changes!',
+                ja: '今日はポジティブな心構えが幸運を呼びます。午後に良いニュースがあるでしょう。小さな変化を試してみてください！',
+                zh: '今天积极的心态会带来好运。下午会有好消息。尝试小的改变！'
+            };
+            
+            return {
+                nickname: nickname,
+                score: score,
+                stars: stars,
+                rank: Math.floor(100 - score),
+                love: fortunes[currentLang][Math.floor(Math.random() * fortunes[currentLang].length)],
+                money: fortunes[currentLang][Math.floor(Math.random() * fortunes[currentLang].length)],
+                health: fortunes[currentLang][Math.floor(Math.random() * fortunes[currentLang].length)],
+                work: fortunes[currentLang][Math.floor(Math.random() * fortunes[currentLang].length)],
+                color: colors[currentLang][Math.floor(Math.random() * colors[currentLang].length)],
+                number: Math.floor(Math.random() * 9) + 1,
+                time: times[currentLang][Math.floor(Math.random() * times[currentLang].length)],
+                advice: advice[currentLang]
+            };
+        }
+        
+        // 결과 표시
+        function displayFortune(data) {
+            document.getElementById('result-name').textContent = `${data.nickname}${translations[currentLang].yourFortune}`;
+            document.getElementById('total-score').textContent = `${data.score}${currentLang === 'en' ? '' : currentLang === 'ja' ? '点' : currentLang === 'zh' ? '分' : '점'}`;
+            document.getElementById('star-rating').textContent = '⭐'.repeat(data.stars);
+            document.getElementById('rank-percent').textContent = data.rank;
+            
+            document.getElementById('love-fortune').textContent = data.love;
+            document.getElementById('money-fortune').textContent = data.money;
+            document.getElementById('health-fortune').textContent = data.health;
+            document.getElementById('work-fortune').textContent = data.work;
+            
+            document.getElementById('lucky-color').textContent = data.color;
+            document.getElementById('lucky-number').textContent = data.number;
+            document.getElementById('lucky-time').textContent = data.time;
+            
+            document.getElementById('advice-text').textContent = data.advice;
+        }
+        
+        // 운세 상세보기 모달
+        function showFortuneDetail(type) {
+            const detail = fortuneDetails[type];
+            const isUnlocked = unlockedDetails.has(type);
+            
+            const titleText = {
+                love: translations[currentLang].loveFortune,
+                money: translations[currentLang].moneyFortune,
+                health: translations[currentLang].healthFortune,
+                work: translations[currentLang].workFortune
+            };
+            
+            document.getElementById('modal-title').innerHTML = `${detail.icon} ${titleText[type]} ${translations[currentLang].detailTitle}`;
+            
+            let bodyHTML = `
+                <div class="detail-section">
+                    <h4>📋 ${translations[currentLang].summary}</h4>
+                    <p>${detail.summary[currentLang]}</p>
+                </div>
+            `;
+            
+            if (isUnlocked) {
+                // 잠금 해제된 경우
+                bodyHTML += `
+                    <div class="detail-section">
+                        <h4>🌟 ${translations[currentLang].mainFortune}</h4>
+                        <p>${detail.detail[currentLang]}</p>
+                    </div>
+                    <div class="detail-section">
+                        <h4>💡 ${translations[currentLang].tips}</h4>
+                        <p>${detail.tips[currentLang]}</p>
+                    </div>
+                `;
+            } else {
+                // 잠금된 경우
+                bodyHTML += `
+                    <div style="position: relative; min-height: 300px;">
+                        <div class="locked-content">
+                            <div class="detail-section">
+                                <h4>🌟 ${translations[currentLang].mainFortune}</h4>
+                                <p>${detail.detail[currentLang]}</p>
+                            </div>
+                            <div class="detail-section">
+                                <h4>💡 ${translations[currentLang].tips}</h4>
+                                <p>${detail.tips[currentLang]}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="unlock-overlay">
+                            <h3>${translations[currentLang].lockedTitle}</h3>
+                            <p style="color: #666; margin-bottom: 20px;">
+                                ${translations[currentLang].lockedDesc}
+                            </p>
+                            <button class="unlock-btn watch-ad" onclick="watchAdToUnlock('${type}')">
+                                ${translations[currentLang].watchAd}
+                            </button>
+                            <button class="unlock-btn cancel" onclick="closeModal()">
+                                ${translations[currentLang].cancel}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('modal-body').innerHTML = bodyHTML;
+            document.getElementById('modal-overlay').style.display = 'block';
+            document.getElementById('modal-content').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+            document.getElementById('modal-content').style.display = 'none';
+        }
+        
+        // 광고 시청 후 잠금 해제
+        function watchAdToUnlock(type) {
+            closeModal();
+            
+            const messages = {
+                ko: {
+                    watching: '광고를 시청하는 중...',
+                    wait: '잠시만 기다려주세요',
+                    unlocked: '잠금 해제 완료!',
+                    check: '상세 운세를 확인하세요'
+                },
+                en: {
+                    watching: 'Watching ad...',
+                    wait: 'Please wait',
+                    unlocked: 'Unlocked!',
+                    check: 'Check your detailed fortune'
+                },
+                ja: {
+                    watching: '広告を視聴中...',
+                    wait: 'しばらくお待ちください',
+                    unlocked: 'ロック解除完了！',
+                    check: '詳しい運勢を確認してください'
+                },
+                zh: {
+                    watching: '正在观看广告...',
+                    wait: '请稍候',
+                    unlocked: '解锁完成！',
+                    check: '查看详细运势'
+                }
+            };
+            
+            const msg = messages[currentLang];
+            
+            // 광고 시청 시뮬레이션
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                z-index: 2000;
+                text-align: center;
+            `;
+            loadingDiv.innerHTML = `
+                <div style="font-size: 48px; margin-bottom: 20px;">📺</div>
+                <p style="color: #333; font-size: 18px; margin-bottom: 15px;">${msg.watching}</p>
+                <p style="color: #999; font-size: 14px;">${msg.wait}</p>
+            `;
+            document.body.appendChild(loadingDiv);
+            
+            // 3초 후 광고 완료
+            setTimeout(() => {
+                document.body.removeChild(loadingDiv);
+                unlockedDetails.add(type);
+                
+                // 성공 메시지
+                const successDiv = document.createElement('div');
+                successDiv.style.cssText = loadingDiv.style.cssText;
+                successDiv.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 20px;">🎉</div>
+                    <p style="color: #333; font-size: 18px; margin-bottom: 15px;">${msg.unlocked}</p>
+                    <p style="color: #999; font-size: 14px;">${msg.check}</p>
+                `;
+                document.body.appendChild(successDiv);
+                
+                setTimeout(() => {
+                    document.body.removeChild(successDiv);
+                    showFortuneDetail(type);
+                }, 1500);
+            }, 3000);
+        }
+        
+        // 공유 기능
+        function shareKakao() {
+            alert('KakaoTalk sharing requires Kakao SDK integration.');
+        }
+        
+        function shareTwitter() {
+            const messages = {
+                ko: `🐰 오늘의 운세 ${fortuneData.score}점! (상위 ${fortuneData.rank}%)\n\n나도 확인하기 👉`,
+                en: `🐰 Today's Fortune ${fortuneData.score} points! (Top ${fortuneData.rank}%)\n\nCheck yours 👉`,
+                ja: `🐰 今日の運勢 ${fortuneData.score}点！（上位${fortuneData.rank}%）\n\nあなたもチェック 👉`,
+                zh: `🐰 今日运势 ${fortuneData.score}分！（前${fortuneData.rank}%）\n\n查看你的 👉`
+            };
+            const text = messages[currentLang];
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        }
+        
+        function shareFacebook() {
+            const url = window.location.href;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        }
+        
+        function copyLink() {
+            const messages = {
+                ko: '링크가 복사되었습니다! 🎉',
+                en: 'Link copied! 🎉',
+                ja: 'リンクがコピーされました！🎉',
+                zh: '链接已复制！🎉'
+            };
+            
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert(messages[currentLang]);
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                alert(messages[currentLang]);
+            });
+        }
+    </script>
+</body>
+</html>
