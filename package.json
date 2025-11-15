@@ -1,0 +1,21 @@
+{
+  "name": "christmas-love-fortune",
+  "version": "1.0.0",
+  "description": "🎄 クリスマス恋愛運占い - AI恋愛診断サービス",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["fortune", "love", "christmas", "ai", "恋愛占い", "クリスマス"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

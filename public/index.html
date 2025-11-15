@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎄 クリスマス恋愛運 - あなたの運命の人は？</title>
+    
+    <!-- Google Analytics GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WLZP2SK7M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5WLZP2SK7M');
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2021805347195633"
+         crossorigin="anonymous"></script>
+    
+    <!-- SEO & SNS -->
+    <meta name="description" content="今年のクリスマスに運命の人と出会える？ AI占いがあなたの恋愛運を診断！">
+    <meta property="og:title" content="🎄 クリスマス恋愛運占い - 運命の人診断">
+    <meta property="og:description" content="今年のクリスマス、あなたに訪れる恋のチャンスは？無料AI占いで今すぐチェック！">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/FF1744/FFFFFF?text=🎄+クリスマス恋愛運">
+    <meta property="og:type" content="website">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 크리스마스 눈 내리는 애니메이션 */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 9999;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 인트로 화면 */
+        #intro-screen {
+            text-align: center;
+            padding-top: 15vh;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .christmas-title {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .main-emoji {
+            font-size: 120px;
+            animation: swing 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 900;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            line-height: 1.4;
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.95);
+            font-size: 16px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .highlight-text {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 32px;
+            display: block;
+            margin: 15px 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .stats-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        /* 버튼 */
+        .btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #FF1744 0%, #F50057 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(245, 0, 87, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 0, 87, 0.5);
+        }
+        
+        .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 입력 화면 */
+        #input-screen {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            text-align: center;
+            color: #FF1744;
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        input[type="date"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #FF1744;
+            box-shadow: 0 0 0 3px rgba(255, 23, 68, 0.1);
+        }
+        
+        .gender-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .gender-option {
+            padding: 18px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            background: white;
+        }
+        
+        .gender-option:hover {
+            border-color: #FF1744;
+            background: rgba(255, 23, 68, 0.05);
+        }
+        
+        .gender-option.selected {
+            border-color: #FF1744;
+            background: rgba(255, 23, 68, 0.1);
+            font-weight: 700;
+        }
+        
+        /* 로딩 화면 */
+        #loading-screen {
+            display: none;
+            text-align: center;
+            padding-top: 25vh;
+        }
+        
+        .loading-animation {
+            font-size: 100px;
+            animation: rotate 2s linear infinite;
+            margin-bottom: 30px;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .loading-subtext {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+        
+        /* 결과 화면 */
+        #result-screen {
+            display: none;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .result-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .compatibility-score {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .score-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #FFE5E5 0%, #FFF0F0 100%);
+            opacity: 0.5;
+        }
+        
+        .score-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .score-label {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .score-number {
+            font-size: 72px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF1744 0%, #F50057 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+            line-height: 1;
+        }
+        
+        .score-hearts {
+            font-size: 36px;
+            margin: 15px 0;
+        }
+        
+        .score-message {
+            font-size: 18px;
+            color: #FF1744;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+        
+        /* 운세 카드 */
+        .fortune-card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .fortune-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #FF1744;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .fortune-item {
+            padding: 18px;
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFEBEE 100%);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FF1744;
+        }
+        
+        .fortune-item-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #FF1744;
+            margin-bottom: 8px;
+        }
+        
+        .fortune-item-text {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        /* 상세 운세 잠금 */
+        .locked-fortune {
+            position: relative;
+            min-height: 200px;
+        }
+        
+        .fortune-blur {
+            filter: blur(8px);
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        .unlock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 300px;
+        }
+        
+        .unlock-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .unlock-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #FF1744;
+            margin-bottom: 10px;
+        }
+        
+        .unlock-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .unlock-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #FF1744 0%, #F50057 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .unlock-btn.secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        /* 공유 섹션 */
+        .share-section {
+            margin-top: 30px;
+        }
+        
+        .share-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .share-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .share-line {
+            background: #00B900;
+            color: white;
+        }
+        
+        .share-twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+        
+        .share-copy {
+            background: #FF1744;
+            color: white;
+        }
+        
+        .retry-btn {
+            background: white;
+            color: #FF1744;
+            border: 2px solid #FF1744;
+        }
+        
+        /* 광고 */
+        .ad-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px dashed #e0e0e0;
+        }
+        
+        .ad-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 반응형 */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+            
+            .highlight-text {
+                font-size: 28px;
+            }
+            
+            .main-emoji {
+                font-size: 90px;
+            }
+            
+            .score-number {
+                font-size: 60px;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 프로그레스 바 */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 인트로 화면 -->
+        <div id="intro-screen">
+            <div class="christmas-title">
+                <div class="main-emoji">🎄</div>
+            </div>
+            <h1>
+                クリスマスまであと<span id="days-until"></span>日！<br>
+                運命の恋、見つけられる？
+            </h1>
+            <span class="highlight-text">相性診断</span>
+            <p class="subtitle">
+                AI占いがあなたの恋愛運を完全分析！<br>
+                今年のクリスマス、素敵な出会いが待っているかも...💕
+            </p>
+            
+            <div class="stats-box">
+                <div class="stat-item">
+                    <span class="stat-label">📊 今日の診断数</span>
+                    <span class="stat-value" id="today-count">3,247</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">💑 カップル成立</span>
+                    <span class="stat-value">182組</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">⭐ 満足度</span>
+                    <span class="stat-value">98.5%</span>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="showInputScreen()">
+                <span class="btn-text">✨ 無料で診断スタート ✨</span>
+            </button>
+        </div>
+        
+        <!-- 입력 화면 -->
+        <div id="input-screen">
+            <div class="card">
+                <h2 class="card-title">💝 あなたのプロフィール</h2>
+                
+                <div class="input-group">
+                    <label>ニックネーム（任意）</label>
+                    <input type="text" id="nickname" placeholder="例：さくら" maxlength="10">
+                </div>
+                
+                <div class="input-group">
+                    <label>性別 *</label>
+                    <div class="gender-select">
+                        <div class="gender-option" onclick="selectGender('female')">
+                            👧 女性
+                        </div>
+                        <div class="gender-option" onclick="selectGender('male')">
+                            👦 男性
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>生年月日 *</label>
+                    <input type="date" id="birthdate" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>現在の恋愛ステータス</label>
+                    <select id="relationship-status">
+                        <option value="single">シングル</option>
+                        <option value="dating">交際中</option>
+                        <option value="complicated">複雑</option>
+                        <option value="seeking">恋人募集中</option>
+                    </select>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="input-progress"></div>
+                </div>
+                
+                <button class="btn" id="submit-btn" onclick="getChristmasFortune()">
+                    <span class="btn-text">🎅 クリスマス恋愛運を見る</span>
+                </button>
+            </div>
+            
+            <!-- 광고 -->
+            <div class="ad-container">
+                <div class="ad-label">広告</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-2021805347195633"
+                     data-ad-slot="1111111111"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+        
+        <!-- 로딩 화면 -->
+        <div id="loading-screen">
+            <div class="loading-animation">🔮</div>
+            <div class="loading-text">AI占い師が鑑定中...</div>
+            <div class="loading-subtext">あなたの運命を読み解いています</div>
+        </div>
+        
+        <!-- 결과 화면 -->
+        <div id="result-screen">
+            <div class="result-header">
+                <h2 id="result-name" style="font-size: 24px; margin-bottom: 15px;">さんの診断結果</h2>
+            </div>
+            
+            <!-- 상성 점수 -->
+            <div class="compatibility-score">
+                <div class="score-bg"></div>
+                <div class="score-content">
+                    <div class="score-label">クリスマス恋愛運スコア</div>
+                    <div class="score-number" id="love-score">92</div>
+                    <div class="score-hearts" id="heart-display">💗💗💗💗💗</div>
+                    <div class="score-message" id="score-message">素晴らしい！運命の出会いが近い！</div>
+                </div>
+            </div>
+            
+            <!-- 기본 운세 -->
+            <div class="fortune-card">
+                <div class="fortune-title">
+                    🎄 今年のクリスマス予報
+                </div>
+                
+                <div class="fortune-item">
+                    <div class="fortune-item-title">💕 出会い運</div>
+                    <div class="fortune-item-text" id="meeting-fortune">
+                        クリスマスイブの夜、運命的な出会いの可能性が非常に高いです！
+                    </div>
+                </div>
+                
+                <div class="fortune-item">
+                    <div class="fortune-item-title">💝 既存の関係</div>
+                    <div class="fortune-item-text" id="existing-fortune">
+                        大切な人との関係が一段階深まる絶好のチャンスです。
+                    </div>
+                </div>
+                
+                <div class="fortune-item">
+                    <div class="fortune-item-title">🎁 ラッキーアクション</div>
+                    <div class="fortune-item-text" id="lucky-action">
+                        赤い服を着て、温かい飲み物を楽しむと良い出会いが！
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 광고 -->
+            <div class="ad-container">
+                <div class="ad-label">広告</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-format="fluid"
+                     data-ad-layout-key="-fb+5w+4e-db+86"
+                     data-ad-client="ca-pub-2021805347195633"
+                     data-ad-slot="2222222222"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
+            <!-- 상세 운세 (잠금) -->
+            <div class="fortune-card locked-fortune" id="detailed-fortune">
+                <div class="fortune-blur">
+                    <div class="fortune-title">
+                        🔮 詳細恋愛アドバイス
+                    </div>
+                    <div class="fortune-item">
+                        <div class="fortune-item-title">運命の人の特徴</div>
+                        <div class="fortune-item-text">
+                            あなたの運命の人は、優しくて思いやりがあり、あなたの笑顔を大切にする人です...
+                        </div>
+                    </div>
+                    <div class="fortune-item">
+                        <div class="fortune-item-title">出会いの場所</div>
+                        <div class="fortune-item-text">
+                            カフェやイルミネーションスポットで素敵な出会いが待っています...
+                        </div>
+                    </div>
+                    <div class="fortune-item">
+                        <div class="fortune-item-title">告白のベストタイミング</div>
+                        <div class="fortune-item-text">
+                            12月24日の夜、星が輝く時間帯が最高のタイミング...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="unlock-overlay">
+                    <div class="unlock-icon">🎁</div>
+                    <div class="unlock-title">もっと詳しく知りたい？</div>
+                    <div class="unlock-desc">
+                        広告を見て、詳細な恋愛アドバイスをゲット！
+                    </div>
+                    <button class="unlock-btn" onclick="watchAdToUnlock()">
+                        📺 広告を見て無料で解放
+                    </button>
+                    <button class="unlock-btn secondary" onclick="closeUnlock()">
+                        後で見る
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 공유 섹션 -->
+            <div class="share-section">
+                <div class="card">
+                    <h3 style="text-align: center; color: #FF1744; margin-bottom: 15px;">
+                        💌 友達にシェアしよう！
+                    </h3>
+                    <div class="share-buttons">
+                        <button class="share-btn share-line" onclick="shareLine()">
+                            LINE
+                        </button>
+                        <button class="share-btn share-twitter" onclick="shareTwitter()">
+                            X (Twitter)
+                        </button>
+                        <button class="share-btn share-copy" onclick="copyLink()">
+                            🔗 リンクコピー
+                        </button>
+                        <button class="share-btn retry-btn" onclick="resetApp()">
+                            🔄 もう一度診断
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedGender = '';
+        let fortuneData = null;
+        
+        // 크리스마스까지 날짜 계산
+        function updateDaysUntilChristmas() {
+            const today = new Date();
+            const christmas = new Date(today.getFullYear(), 11, 25);
+            if (today > christmas) {
+                christmas.setFullYear(christmas.getFullYear() + 1);
+            }
+            const diff = Math.ceil((christmas - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-until').textContent = diff;
+        }
+        
+        // 눈 내리는 효과
+        function createSnowflakes() {
+            const snowflakes = ['❄️', '⛄', '🎄', '⭐'];
+            setInterval(() => {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+                snowflake.style.opacity = Math.random();
+                document.body.appendChild(snowflake);
+                
+                setTimeout(() => {
+                    snowflake.remove();
+                }, 5000);
+            }, 300);
+        }
+        
+        // 오늘의 진단 수 애니메이션
+        function animateCount() {
+            const countElement = document.getElementById('today-count');
+            let count = 0;
+            const target = 3247;
+            const duration = 2000;
+            const step = target / (duration / 50);
+            
+            const interval = setInterval(() => {
+                count += step;
+                if (count >= target) {
+                    count = target;
+                    clearInterval(interval);
+                }
+                countElement.textContent = Math.floor(count).toLocaleString();
+            }, 50);
+        }
+        
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDaysUntilChristmas();
+            createSnowflakes();
+            animateCount();
+            
+            const today = new Date();
+            const maxDate = today.toISOString().split('T')[0];
+            document.getElementById('birthdate').setAttribute('max', maxDate);
+            
+            // 입력 진행도
+            const inputs = document.querySelectorAll('#input-screen input, #input-screen select');
+            inputs.forEach(input => {
+                input.addEventListener('change', updateProgress);
+                input.addEventListener('input', updateProgress);
+            });
+        });
+        
+        function updateProgress() {
+            const nickname = document.getElementById('nickname').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const status = document.getElementById('relationship-status').value;
+            
+            let progress = 0;
+            if (selectedGender) progress += 33;
+            if (birthdate) progress += 34;
+            if (status) progress += 33;
+            
+            document.getElementById('input-progress').style.width = progress + '%';
+        }
+        
+        function selectGender(gender) {
+            selectedGender = gender;
+            document.querySelectorAll('.gender-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.gender-option').classList.add('selected');
+            updateProgress();
+        }
+        
+        function showInputScreen() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('input-screen').style.display = 'block';
+        }
+        
+        function showLoadingScreen() {
+            document.getElementById('input-screen').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'block';
+        }
+        
+        function showResultScreen() {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+        }
+        
+        function resetApp() {
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('input-screen').style.display = 'block';
+            document.getElementById('nickname').value = '';
+            document.getElementById('birthdate').value = '';
+            selectedGender = '';
+            document.querySelectorAll('.gender-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById('input-progress').style.width = '0%';
+        }
+        
+        // 크리스마스 운세 조회
+        async function getChristmasFortune() {
+            const birthdate = document.getElementById('birthdate').value;
+            const nickname = document.getElementById('nickname').value || 'あなた';
+            const status = document.getElementById('relationship-status').value;
+            
+            if (!birthdate || !selectedGender) {
+                alert('すべての必須項目を入力してください！');
+                return;
+            }
+            
+            showLoadingScreen();
+            
+            // Mock 데이터 생성 (실제로는 API 호출)
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            fortuneData = generateChristmasFortune(birthdate, nickname, selectedGender, status);
+            displayFortune(fortuneData);
+            
+            showResultScreen();
+        }
+        
+        function generateChristmasFortune(birthdate, nickname, gender, status) {
+            const score = Math.floor(Math.random() * 30) + 70;
+            const hearts = Math.floor(score / 20);
+            
+            const messages = {
+                high: '素晴らしい！運命の出会いが近い！',
+                medium: '良い兆しあり！チャンスを逃さないで',
+                low: '準備を整えて、次のチャンスを待とう'
+            };
+            
+            const meetingFortunes = [
+                'クリスマスイブの夜、運命的な出会いの可能性が非常に高いです！イルミネーションの下で素敵な人との出会いが待っているかも。',
+                'クリスマスパーティーで気になる人と急接近！共通の趣味を持つ人との出会いが期待できます。',
+                '12月中旬から下旬にかけて、偶然の出会いが運命に変わる可能性大！カフェや書店で素敵な出会いが。'
+            ];
+            
+            const existingFortunes = [
+                '大切な人との関係が一段階深まる絶好のチャンス。素直な気持ちを伝えてみて。',
+                '二人の絆がより強くなる時期。一緒に過ごす時間を大切にしましょう。',
+                '相手の新しい一面を発見できる予感。お互いの理解が深まります。'
+            ];
+            
+            const luckyActions = [
+                '赤い服を着て、温かい飲み物を楽しむと良い出会いが！クリスマスマーケットへGo！',
+                'イルミネーションを見に行くと幸運が訪れます。友達と一緒に出かけてみて。',
+                'クリスマスソングを聴きながら街を歩くと、素敵な出会いの予感。'
+            ];
+            
+            return {
+                nickname: nickname,
+                score: score,
+                hearts: hearts,
+                message: score >= 85 ? messages.high : score >= 70 ? messages.medium : messages.low,
+                meetingFortune: meetingFortunes[Math.floor(Math.random() * meetingFortunes.length)],
+                existingFortune: existingFortunes[Math.floor(Math.random() * existingFortunes.length)],
+                luckyAction: luckyActions[Math.floor(Math.random() * luckyActions.length)]
+            };
+        }
+        
+        function displayFortune(data) {
+            document.getElementById('result-name').textContent = `${data.nickname}さんの診断結果`;
+            document.getElementById('love-score').textContent = data.score;
+            document.getElementById('heart-display').textContent = '💗'.repeat(data.hearts);
+            document.getElementById('score-message').textContent = data.message;
+            
+            document.getElementById('meeting-fortune').textContent = data.meetingFortune;
+            document.getElementById('existing-fortune').textContent = data.existingFortune;
+            document.getElementById('lucky-action').textContent = data.luckyAction;
+        }
+        
+        // 광고 시청 후 잠금 해제
+        function watchAdToUnlock() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 40px;
+                border-radius: 25px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+                z-index: 10000;
+                text-align: center;
+            `;
+            loadingDiv.innerHTML = `
+                <div style="font-size: 64px; margin-bottom: 20px;">📺</div>
+                <p style="font-size: 18px; font-weight: 700; color: #333; margin-bottom: 10px;">広告を視聴中...</p>
+                <p style="font-size: 14px; color: #666;">しばらくお待ちください</p>
+            `;
+            document.body.appendChild(loadingDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(loadingDiv);
+                
+                // 잠금 해제
+                const lockedFortune = document.getElementById('detailed-fortune');
+                lockedFortune.querySelector('.fortune-blur').style.filter = 'none';
+                lockedFortune.querySelector('.unlock-overlay').style.display = 'none';
+                
+                // 성공 메시지
+                const successDiv = document.createElement('div');
+                successDiv.style.cssText = loadingDiv.style.cssText;
+                successDiv.innerHTML = `
+                    <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
+                    <p style="font-size: 20px; font-weight: 700; color: #FF1744; margin-bottom: 10px;">解放完了！</p>
+                    <p style="font-size: 14px; color: #666;">詳細な恋愛アドバイスをチェック！</p>
+                `;
+                document.body.appendChild(successDiv);
+                
+                setTimeout(() => {
+                    document.body.removeChild(successDiv);
+                }, 2000);
+            }, 3000);
+        }
+        
+        function closeUnlock() {
+            // 모달 닫기만
+        }
+        
+        // 공유 기능
+        function shareLine() {
+            const text = `🎄 私のクリスマス恋愛運は${fortuneData.score}点！\n\nあなたも診断してみて！💕`;
+            const url = window.location.href;
+            window.open(`https://line.me/R/msg/text/?${encodeURIComponent(text + '\n' + url)}`, '_blank');
+        }
+        
+        function shareTwitter() {
+            const text = `🎄 クリスマス恋愛運診断で${fortuneData.score}点でした！\n${fortuneData.message}\n\nあなたも診断してみて！💕`;
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        }
+        
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('リンクがコピーされました！ 🎉');
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                alert('リンクがコピーされました！ 🎉');
+            });
+        }
+    </script>
+</body>
+</html>
